@@ -1,0 +1,32 @@
+/* STYLES */
+body{
+	font:14px/1.3em Arial, Helvetica, sans-serif;
+	background:#EEE;
+	color:#999;
+}
+.page{
+	background: #FFF;
+	min-width: 900px;
+	max-width:1140px;
+	padding:30px;
+	border:solid 1px #DDD;
+	margin:20px auto;
+	min-height:500px;
+}
+h1,h2,h3,h4,h5,h6{
+	color: #333;
+}
+h1{
+	font-size: 26px;
+	border-bottom: dotted 1px #CCC;
+	padding:15px 0 10px;
+	margin-bottom:20px;
+}
+.btn{
+	background: #03d;
+	padding:10px;
+	display: inline-block;
+	cursor: pointer;
+	position: relative;
+	left:0px;
+}

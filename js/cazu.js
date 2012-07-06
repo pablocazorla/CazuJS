@@ -1,6 +1,14 @@
 //App.js
 
 ;(function(){
+	//Utils
+	var toCamelCase = function(str){
+		var newStr = str.replace(/\-(\w)/g, function (strMatch, p1){
+			return p1.toUpperCase();
+		});
+		return newStr;
+	}
+	
 	
 	var Cazu = {
 		id : null,
@@ -10,6 +18,31 @@
 			this.id = id;
 			this.elem = document.getElementById(id);
 			return this;
+		},
+		css : function(arg1,arg2){
+			if(typeof arg1 == 'string'){
+				if(typeof arg2 == 'string'){
+					var obj = {};
+					obj[arg1] = arg2;
+					arg1 = obj;
+				}else{
+					var val = "";
+					if(document.defaultView && document.defaultView.getComputedStyle){
+						val = document.defaultView.getComputedStyle(this.elem, "").getPropertyValue(arg1);
+					}else if(this.elem.currentStyle){
+						arg1 = toCamelCase(arg1);
+						val = this.elem.currentStyle[arg1];
+					}
+					return val;
+				}
+			}
+			if(typeof arg1 == 'object'){
+				for(var a in arg1){
+					var aC = toCamelCase(a);					
+					this.elem.style[aC] = arg1[a];
+				}
+				return this;
+			}
 		},
 		
 		bind : function (eventType, eventHandler) {

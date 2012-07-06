@@ -7,10 +7,18 @@
 			return p1.toUpperCase();
 		});
 		return newStr;
-	}
+	},
+	getStyle = function(el,str){
+		if(document.defaultView && document.defaultView.getComputedStyle){
+			return document.defaultView.getComputedStyle(el, "").getPropertyValue(str);
+		}else if(el.currentStyle){
+			str = toCamelCase(str);
+			return el.currentStyle[str];
+		}
+	},
 	
-	
-	var Cazu = {
+	//Cazu
+	Cazu = {
 		id : null,
 		elem : null,
 		
@@ -27,13 +35,8 @@
 					arg1 = obj;
 				}else{
 					var val = "";
-					if(document.defaultView && document.defaultView.getComputedStyle){
-						val = document.defaultView.getComputedStyle(this.elem, "").getPropertyValue(arg1);
-					}else if(this.elem.currentStyle){
-						arg1 = toCamelCase(arg1);
-						val = this.elem.currentStyle[arg1];
-					}
-					return val;
+					
+					return getStyle(this.elem,arg1);
 				}
 			}
 			if(typeof arg1 == 'object'){
@@ -45,7 +48,7 @@
 			}
 		},
 		
-		bind : function (eventType, eventHandler) {
+		on : function (eventType, eventHandler) {
 			if (this.elem.addEventListener) {
 				this.elem.addEventListener(eventType, eventHandler,false);
 			} else if (this.elem.attachEvent) {
@@ -57,25 +60,20 @@
 			return this;
 		},
 		click : function(eventHandler){
-			return this.bind('click',eventHandler);
+			return this.on('click',eventHandler);
 		},
-		animate : function(attrs,duration,callb){
+		animate : function(attrs,vel,callb){
 			
-			var elm = this.elem,
-				time = 0;
-			elm.style.left = "0px";
+			var elm = this.elem;
 			var timer = setInterval(function(){
 				
 				for(var a in attrs){
-					var aVal = parseInt(elm.style[a]);
-					elm.style[a] = aVal + 1 +'px';					
+					var current = parseInt(getStyle(elm,a)),
+					difVal = (current - parseInt(attrs[a])) * vel;
+					
+					elm.style[a] = Math.round(current - difVal) +'px';					
 				}
-				time++;
-				log(time)
-				if(time==duration){
-					clearInterval(timer);
-					callb();
-				}
+				
 				
 				
 			},16)
